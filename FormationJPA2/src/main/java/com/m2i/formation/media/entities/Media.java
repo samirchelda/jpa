@@ -3,6 +3,7 @@ package com.m2i.formation.media.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -11,10 +12,11 @@ import java.util.Date;
  */
 @Entity
 @NamedQuery(name="Media.findAll", query="SELECT m FROM Media m")
-public class Media implements Serializable {
+public class Media implements Serializable,IEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private int category;
@@ -22,19 +24,34 @@ public class Media implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date dateParution;
 
-	private int id_Publisher;
-
 	private String langue;
 
-	private int nbPages;
+	private Integer nbPages;
 
-	private int nbTracks;
+	private Integer nbTracks;
 
 	private int numISBN;
 
 	private float price;
 
 	private String title;
+
+	//bi-directional many-to-one association to Publisher
+	@ManyToOne
+	@JoinColumn(name="id_Publisher")
+	private Publisher publisher;
+
+	//bi-directional many-to-many association to Author
+	@ManyToMany(mappedBy="medias")
+	private List<Author> authors;
+
+	//bi-directional many-to-many association to Card
+	@ManyToMany(mappedBy="medias")
+	private List<Card> cards;
+
+	//bi-directional many-to-one association to Page
+	@OneToMany(mappedBy="media")
+	private List<Page> pages;
 
 	public Media() {
 	}
@@ -61,14 +78,6 @@ public class Media implements Serializable {
 
 	public void setDateParution(Date dateParution) {
 		this.dateParution = dateParution;
-	}
-
-	public int getId_Publisher() {
-		return this.id_Publisher;
-	}
-
-	public void setId_Publisher(int id_Publisher) {
-		this.id_Publisher = id_Publisher;
 	}
 
 	public String getLangue() {
@@ -117,6 +126,52 @@ public class Media implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Publisher getPublisher() {
+		return this.publisher;
+	}
+
+	public void setPublisher(Publisher publisher) {
+		this.publisher = publisher;
+	}
+
+	public List<Author> getAuthors() {
+		return this.authors;
+	}
+
+	public void setAuthors(List<Author> authors) {
+		this.authors = authors;
+	}
+
+	public List<Card> getCards() {
+		return this.cards;
+	}
+
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
+	}
+
+	public List<Page> getPages() {
+		return this.pages;
+	}
+
+	public void setPages(List<Page> pages) {
+		this.pages = pages;
+	}
+
+	public Page addPage(Page page) {
+		getPages().add(page);
+		page.setMedia(this);
+
+		return page;
+	}
+
+	public Page removePage(Page page) {
+		getPages().remove(page);
+		page.setMedia(null);
+
+		return page;
 	}
 
 }
