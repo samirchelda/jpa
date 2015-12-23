@@ -1,0 +1,32 @@
+<?xml version=‘1.0’ encoding=‘utf-8’?>
+<employees>
+  <employee id="111">
+    <firstName>Rakesh</firstName>
+    <lastName>Mishra</lastName>
+    <location>Bangalore</location>
+  </employee>
+  <employee id="112">
+    <firstName>John</firstName>
+    <lastName>Davis</lastName>
+    <location>Chennai</location>
+  </employee>
+  <employee id="113">
+    <firstName>Rajesh</firstName>
+    <lastName>Sharma</lastName>
+    <location>Pune</location>
+  </employee>
+</employees>
+
+————8<————
+
+class Employee{
+  String id;
+  String firstName;
+  String lastName;
+  String location;
+
+  @Override
+  public String toString() {
+    return firstName+" "+lastName+"("+id+")"+location;
+  }
+}
